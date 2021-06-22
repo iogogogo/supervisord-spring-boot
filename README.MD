@@ -1,0 +1,1 @@
+# Supervisord process manager for spring boot starter

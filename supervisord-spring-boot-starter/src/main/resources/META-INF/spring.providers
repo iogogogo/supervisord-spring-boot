@@ -1,0 +1,1 @@
+providers: supervisord-spring-boot-autoconfigure
