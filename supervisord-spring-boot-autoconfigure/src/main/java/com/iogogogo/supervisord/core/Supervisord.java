@@ -21,6 +21,7 @@ import java.util.stream.Stream;
  * Created by tao.zeng on 2021/6/21.
  */
 public class Supervisord {
+
     private final static Logger LOGGER = LoggerFactory.getLogger(Supervisord.class);
 
     private final static String DEFAULT_URL = "http://localhost:9001/RPC2";
@@ -36,6 +37,7 @@ public class Supervisord {
     private String password;
 
     private Supervisord() {
+
     }
 
     public static Supervisord connect() {
