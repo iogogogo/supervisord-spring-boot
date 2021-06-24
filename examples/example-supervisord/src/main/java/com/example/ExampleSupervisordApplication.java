@@ -1,6 +1,6 @@
 package com.example;
 
-import com.iogogogo.supervisord.annotation.EnableSupervisordConfiguration;
+import com.iogogogo.supervisord.annotation.EnableSupervisord;
 import com.iogogogo.supervisord.core.Supervisord;
 import com.iogogogo.supervisord.domain.SupervisordProcess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.List;
 
 @SpringBootApplication
-@EnableSupervisordConfiguration
+@EnableSupervisord
 public class ExampleSupervisordApplication implements CommandLineRunner {
 
     @Autowired
@@ -25,15 +25,19 @@ public class ExampleSupervisordApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         List<String> list = supervisord.listMethods();
         list.forEach(System.out::println);
-//
-//        boolean b = supervisord.startProcess("", false);
-//
-//        supervisord.stopProcess("",false);
-//
-//        supervisord.getProcessInfo("");
+
+        String procName = "logstash_test";
+
+        boolean ret = supervisord.startProcess(procName, false);
+        System.out.println(ret);
+
+        ret = supervisord.stopProcess(procName, false);
+        System.out.println(ret);
+
+        SupervisordProcess processInfo = supervisord.getProcessInfo(procName);
+        System.out.println(processInfo);
 
         List<SupervisordProcess> allProcessInfo = supervisord.getAllProcessInfo();
-
         allProcessInfo.forEach(System.out::println);
     }
 }

@@ -27,7 +27,7 @@ package com.iogogogo.supervisord.core;
  * <p>
  * Created by tao.zeng on 2021/6/22.
  */
-public interface Constants {
+public interface SupervisordConstants {
     /**
      * The constant FATAL.
      */

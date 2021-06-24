@@ -1,6 +1,7 @@
 package com.iogogogo.supervisord.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Created by tao.zeng on 2021/6/22.
@@ -8,6 +9,7 @@ import lombok.Data;
  * http://supervisord.org/api.html#supervisor.rpcinterface.SupervisorNamespaceRPCInterface.getProcessInfo
  */
 @Data
+@ToString
 public class SupervisordProcess {
 
     /**

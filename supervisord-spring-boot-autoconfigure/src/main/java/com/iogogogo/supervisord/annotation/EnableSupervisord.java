@@ -12,5 +12,5 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(value = {SupervisordAutoConfiguration.class})
-public @interface EnableSupervisordConfiguration {
+public @interface EnableSupervisord {
 }

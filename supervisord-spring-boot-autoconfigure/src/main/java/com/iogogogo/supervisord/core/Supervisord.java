@@ -1,10 +1,12 @@
 package com.iogogogo.supervisord.core;
 
 import com.iogogogo.supervisord.domain.SupervisordProcess;
+import com.iogogogo.supervisord.event.SupervisordEvent;
 import com.iogogogo.supervisord.exception.SupervisordException;
 import com.iogogogo.supervisord.util.BeanMapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,7 +22,7 @@ import java.util.stream.Stream;
 /**
  * Created by tao.zeng on 2021/6/21.
  */
-public class Supervisord {
+public class Supervisord implements SupervisordConstants {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Supervisord.class);
 
@@ -36,8 +38,9 @@ public class Supervisord {
     private String username;
     private String password;
 
-    private Supervisord() {
+    private ApplicationContext applicationContext;
 
+    private Supervisord() {
     }
 
     public static Supervisord connect() {
@@ -74,13 +77,24 @@ public class Supervisord {
         return this;
     }
 
+    public Supervisord applicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+        return this;
+    }
+
+    private void publishEvent(String method, Object data) {
+        SupervisordEvent event = new SupervisordEvent(data);
+        event.setMethod(method);
+        applicationContext.publishEvent(event);
+    }
+
     /**
      * Return the version of the RPC API used by supervisord
      *
      * @return string version version id
      */
     public String getAPIVersion() throws SupervisordException {
-        return (String) new SimpleXMLRPC().call(buildFullMethodCall(Constants._GET_API_VERSION));
+        return (String) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._GET_API_VERSION));
     }
 
     /**
@@ -89,7 +103,7 @@ public class Supervisord {
      * @return string version version id
      */
     public String getSupervisorVersion() throws SupervisordException {
-        return (String) new SimpleXMLRPC().call(buildFullMethodCall(Constants._GET_SUPERVISOR_VERSION));
+        return (String) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._GET_SUPERVISOR_VERSION));
     }
 
     /**
@@ -98,7 +112,7 @@ public class Supervisord {
      * @return string identifier identifying string
      */
     public String getIdentification() throws SupervisordException {
-        return (String) new SimpleXMLRPC().call(buildFullMethodCall(Constants._GET_IDENTIFICATION));
+        return (String) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._GET_IDENTIFICATION));
     }
 
     /**
@@ -107,7 +121,7 @@ public class Supervisord {
      * @return struct A struct with keys int statecode, string statename
      */
     public Map<String, Object> getState() throws SupervisordException {
-        return (Map<String, Object>) new SimpleXMLRPC().call(buildFullMethodCall(Constants._GET_STATE));
+        return (Map<String, Object>) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._GET_STATE));
     }
 
     /**
@@ -116,7 +130,7 @@ public class Supervisord {
      * @return int PID
      */
     public int getPID() throws SupervisordException {
-        return (Integer) new SimpleXMLRPC().call(buildFullMethodCall(Constants._GET_PID));
+        return (Integer) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._GET_PID));
     }
 
     /**
@@ -129,7 +143,7 @@ public class Supervisord {
     public String readLog(int offset, int length) throws SupervisordException {
         if (offset < 0) offset = 0;
         if (length < 0) length = 0;
-        return (String) new SimpleXMLRPC().call(buildFullMethodCall(Constants._READ_LOG), offset, length);
+        return (String) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._READ_LOG), offset, length);
     }
 
     /**
@@ -138,7 +152,7 @@ public class Supervisord {
      * @return boolean result always returns True unless error
      */
     public boolean clearLog() throws SupervisordException {
-        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(Constants._CLEAR_LOG));
+        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._CLEAR_LOG));
     }
 
     /**
@@ -147,7 +161,7 @@ public class Supervisord {
      * @return boolean result always returns True unless error
      */
     public boolean shutdown() throws SupervisordException {
-        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(Constants._SHUTDOWN));
+        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._SHUTDOWN));
     }
 
     /**
@@ -156,7 +170,7 @@ public class Supervisord {
      * @return boolean result always return True unless error
      */
     public boolean restart() throws SupervisordException {
-        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(Constants._RESTART));
+        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._RESTART));
     }
 
 
@@ -167,9 +181,13 @@ public class Supervisord {
      *                    structure containing data about the process
      * @return string {http://supervisord.org/api.html#supervisor.rpcinterface.SupervisorNamespaceRPCInterface.getProcessInfo}
      */
-    public SupervisordProcess getProcessInfo(String processName) throws SupervisordException, InstantiationException, IllegalAccessException {
-        Object result = new SimpleXMLRPC().call(buildFullMethodCall(Constants._GET_PROCESS_INFO), processName);
-        return BeanMapUtils.mapToBean((Map<String, Object>) result, SupervisordProcess.class);
+    public SupervisordProcess getProcessInfo(String processName) throws SupervisordException {
+        Object result = new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._GET_PROCESS_INFO), processName);
+        SupervisordProcess supervisordProcess = BeanMapUtils.mapToBean((Map<String, Object>) result, SupervisordProcess.class);
+
+        this.publishEvent(SupervisordConstants._GET_PROCESS_INFO, supervisordProcess);
+
+        return supervisordProcess;
     }
 
     /**
@@ -178,13 +196,17 @@ public class Supervisord {
      * @return array result An array of process status results
      */
     public List<SupervisordProcess> getAllProcessInfo() throws SupervisordException {
-        Object[] call = (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(Constants._GET_ALL_PROCESS_INFO));
-        return Stream.of(call)
+        Object[] call = (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._GET_ALL_PROCESS_INFO));
+        List<SupervisordProcess> collect = Stream.of(call)
                 .filter(x -> x instanceof Map)
                 .map(x -> (Map<String, Object>) x)
                 .map(x -> BeanMapUtils.mapToBean(x, SupervisordProcess.class))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+
+        this.publishEvent(SupervisordConstants._GET_ALL_PROCESS_INFO, collect);
+
+        return collect;
     }
 
     /**
@@ -195,7 +217,7 @@ public class Supervisord {
      * @return boolean result Always true unless error
      */
     public boolean startProcess(String processName, boolean waitToStart) throws SupervisordException {
-        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(Constants._START_PROCESS), processName, waitToStart);
+        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._START_PROCESS), processName, waitToStart);
     }
 
     /**
@@ -205,7 +227,7 @@ public class Supervisord {
      * @return array result An array of process status info structs
      */
     public Object[] startAllProcesses(boolean waitToStart) throws SupervisordException {
-        return (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(Constants._START_ALL_PROCESSES), waitToStart);
+        return (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._START_ALL_PROCESSES), waitToStart);
     }
 
     /**
@@ -216,7 +238,7 @@ public class Supervisord {
      * @return array result An array of process status info structs
      */
     public Object[] startProcessGroup(String groupName, boolean waitToStart) throws SupervisordException {
-        return (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(Constants._START_PROCESSES_GROUP), groupName, waitToStart);
+        return (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._START_PROCESSES_GROUP), groupName, waitToStart);
     }
 
     /**
@@ -227,7 +249,7 @@ public class Supervisord {
      * @return boolean result Always return True unless error
      */
     public boolean stopProcess(String processName, boolean waitToStop) throws SupervisordException {
-        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(Constants._STOP_PROCESS), processName, waitToStop);
+        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._STOP_PROCESS), processName, waitToStop);
     }
 
     /**
@@ -238,7 +260,7 @@ public class Supervisord {
      * @return array result An array of process status info structs
      */
     public Object stopProcessGroup(String groupName, boolean waitToStop) throws SupervisordException {
-        return new SimpleXMLRPC().call(buildFullMethodCall(Constants._STOP_PROCESSES_GROUP), groupName, waitToStop);
+        return new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._STOP_PROCESSES_GROUP), groupName, waitToStop);
     }
 
     /**
@@ -248,7 +270,7 @@ public class Supervisord {
      * @return array result An array of process status info structs
      */
     public Object[] stopAllProcesses(boolean waitToStop) throws SupervisordException {
-        return (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(Constants._STOP_ALL_PROCESSES), waitToStop);
+        return (Object[]) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._STOP_ALL_PROCESSES), waitToStop);
     }
 
     /**
@@ -258,7 +280,7 @@ public class Supervisord {
      * @param signal      signal Signal to send, as name (‘HUP’) or number (‘1’)
      */
     public boolean signalProcess(String processName, Signal signal) throws SupervisordException {
-        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(Constants._SIGNAL_PROCESS), processName, signal.name());
+        return (Boolean) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._SIGNAL_PROCESS), processName, signal.name());
     }
 
     /**
@@ -269,7 +291,7 @@ public class Supervisord {
      * @return array
      */
     public Boolean[] signalProcessGroup(String groupName, Signal signal) throws SupervisordException {
-        return (Boolean[]) new SimpleXMLRPC().call(buildFullMethodCall(Constants._SIGNAL_PROCESSES_GROUP), groupName, signal.name());
+        return (Boolean[]) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._SIGNAL_PROCESSES_GROUP), groupName, signal.name());
     }
 
 
@@ -280,7 +302,7 @@ public class Supervisord {
      * @return array An array of process status info structs
      */
     public Boolean[] signalAllProcesses(Signal signal) throws SupervisordException {
-        return (Boolean[]) new SimpleXMLRPC().call(buildFullMethodCall(Constants._SIGNAL_ALL_PROCESSES), signal.name());
+        return (Boolean[]) new SimpleXMLRPC().call(buildFullMethodCall(SupervisordConstants._SIGNAL_ALL_PROCESSES), signal.name());
     }
 
     /**
@@ -436,16 +458,16 @@ public class Supervisord {
 
     /////
     public List<String> listMethods() throws SupervisordException {
-        Object[] call = (Object[]) new SimpleXMLRPC().call(Constants.SYSTEM_LIST_METHODS);
+        Object[] call = (Object[]) new SimpleXMLRPC().call(SupervisordConstants.SYSTEM_LIST_METHODS);
         return Stream.of(call).map(String::valueOf).collect(Collectors.toList());
     }
 
     public String methodHelp(String method) throws SupervisordException {
-        return String.valueOf(new SimpleXMLRPC().call(Constants.SYSTEM_METHOD_HELP, buildFullMethodCall(method)));
+        return String.valueOf(new SimpleXMLRPC().call(SupervisordConstants.SYSTEM_METHOD_HELP, buildFullMethodCall(method)));
     }
 
     public Object[] methodSignature(String method) throws SupervisordException {
-        return (Object[]) new SimpleXMLRPC().call(Constants.SYSTEM_METHOD_SIGNATURE);
+        return (Object[]) new SimpleXMLRPC().call(SupervisordConstants.SYSTEM_METHOD_SIGNATURE);
     }
 
     //TODO

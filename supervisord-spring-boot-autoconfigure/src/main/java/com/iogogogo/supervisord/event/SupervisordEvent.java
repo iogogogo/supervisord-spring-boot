@@ -2,18 +2,22 @@ package com.iogogogo.supervisord.event;
 
 import org.springframework.context.ApplicationEvent;
 
-import java.time.Clock;
-
 /**
  * Created by tao.zeng on 2021/6/23.
  */
 public class SupervisordEvent extends ApplicationEvent {
 
+    private String method;
+
     public SupervisordEvent(Object source) {
         super(source);
     }
 
-    public SupervisordEvent(Object source, Clock clock) {
-        super(source, clock);
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 }
