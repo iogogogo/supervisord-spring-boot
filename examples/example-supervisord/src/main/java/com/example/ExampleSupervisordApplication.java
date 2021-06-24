@@ -3,6 +3,7 @@ package com.example;
 import com.iogogogo.supervisord.annotation.EnableSupervisord;
 import com.iogogogo.supervisord.core.Supervisord;
 import com.iogogogo.supervisord.domain.SupervisordProcess;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,8 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
 
-@SpringBootApplication
+@Slf4j
 @EnableSupervisord
+@SpringBootApplication
 public class ExampleSupervisordApplication implements CommandLineRunner {
 
     @Autowired

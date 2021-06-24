@@ -29,4 +29,10 @@ public class SupervisordProperties {
      * The Password.
      */
     private String password;
+
+    /**
+     * the Event enabled
+     */
+    @Deprecated
+    private boolean enableEventListener;
 }
