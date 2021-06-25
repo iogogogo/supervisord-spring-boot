@@ -12,7 +12,7 @@
     <version>1.0.0</version>
 
     <name>supervisord-spring-boot</name>
-    <description>supervisord project for Spring Boot</description>
+    <description>supervisord process manager for Spring Boot</description>
 
 
     <properties>
@@ -21,6 +21,7 @@
         <lombok.version>1.18.8</lombok.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <nexus.url>http://192.168.31.230:18081</nexus.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -78,5 +79,34 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+
+        <!--
+            vim ~/.m2/settings.xml
+            <servers>
+                <server>
+                  <id>nexus-releases</id>
+                  <username>username</username>
+                  <password>password</password>
+                </server>
+                <server>
+                  <id>nexus-snapshots</id>
+                  <username>username</username>
+                  <password>password</password>
+                </server>
+            </servers>
+        -->
+
+        <repository>
+            <id>nexus-releases</id>
+            <url>${nexus.url}/repository/maven-releases/</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>${nexus.url}/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

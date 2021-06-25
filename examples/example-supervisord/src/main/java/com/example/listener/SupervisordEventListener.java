@@ -11,9 +11,13 @@ import java.util.List;
 
 /**
  * // https://www.cnblogs.com/doudouxiaoye/p/5688629.html
+ * <p>
+ * <p>
  * Type superClz = source.getClass().getGenericSuperclass();
+ * <p>
  * Type type = ((ParameterizedType) superClz).getActualTypeArguments()[0];
  *
+ * <p>
  * <p>
  * Created by tao.zeng on 2021/6/24.
  */
