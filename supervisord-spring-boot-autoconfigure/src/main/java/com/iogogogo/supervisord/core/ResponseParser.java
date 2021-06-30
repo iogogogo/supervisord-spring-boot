@@ -32,7 +32,34 @@ import java.util.Map;
  */
 public class ResponseParser {
     private enum TYPE {
-        I4, INT, STRING, BOOLEAN, DOUBLE, STRUCT, ARRAY
+        /**
+         * 4 type.
+         */
+        I4,
+        /**
+         * Int type.
+         */
+        INT,
+        /**
+         * String type.
+         */
+        STRING,
+        /**
+         * Boolean type.
+         */
+        BOOLEAN,
+        /**
+         * Double type.
+         */
+        DOUBLE,
+        /**
+         * Struct type.
+         */
+        STRUCT,
+        /**
+         * Array type.
+         */
+        ARRAY
     }
 
     private static final String FAULT_CODE = "faultCode";
@@ -41,13 +68,24 @@ public class ResponseParser {
     private static final String METHOD_RESPONSE = "methodResponse";
     private static final String PARAMS = "params";
     private static final String PARAM = "param";
+    /**
+     * The constant VALUE.
+     */
     public static final String VALUE = "value";
     private static final String FAULT = "fault";
     private static final String METHOD_CALL = "methodCall";
     private static final String METHOD_NAME = "methodName";
     private static final String STRUCT_MEMBER = "member";
 
-    Object parse(InputStream xmlIn) throws XMLRPCException, SupervisordException {
+    /**
+     * Parse object.
+     *
+     * @param xmlIn the xml in
+     * @return the object
+     * @throws XMLRPCException      the xmlrpc exception
+     * @throws SupervisordException the supervisord exception
+     */
+    public Object parse(InputStream xmlIn) throws XMLRPCException, SupervisordException {
         try {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -90,6 +128,14 @@ public class ResponseParser {
         }
     }
 
+    /**
+     * Print document.
+     *
+     * @param doc the doc
+     * @param out the out
+     * @throws IOException          the io exception
+     * @throws TransformerException the transformer exception
+     */
     public static void printDocument(Document doc, OutputStream out)
             throws IOException, TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();

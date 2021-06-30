@@ -1,5 +1,7 @@
 package com.iogogogo.supervisord;
 
+import com.iogogogo.supervisord.api.SupervisordRpcApi;
+import com.iogogogo.supervisord.aspect.SupervisordAspect;
 import com.iogogogo.supervisord.configuration.SupervisordConfiguration;
 import com.iogogogo.supervisord.properties.SupervisordProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -11,6 +13,6 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SupervisordProperties.class)
-@Import({SupervisordConfiguration.class})
+@Import({SupervisordConfiguration.class, SupervisordAspect.class, SupervisordRpcApi.class})
 public class SupervisordAutoConfiguration {
 }

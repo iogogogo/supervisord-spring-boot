@@ -13,7 +13,7 @@ public class SupervisordProperties {
     /**
      * The Supervisord prefix.
      */
-    static final String SUPERVISORD_PREFIX = "supervisord";
+    public static final String SUPERVISORD_PREFIX = "supervisord";
 
     /**
      * The Url.
@@ -31,8 +31,8 @@ public class SupervisordProperties {
     private String password;
 
     /**
-     * the Event enabled
+     * the rpc api enabled
      */
     @Deprecated
-    private boolean enableEventListener;
+    private boolean enableRpcApi;
 }

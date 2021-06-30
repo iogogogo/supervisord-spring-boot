@@ -7,18 +7,37 @@ package com.iogogogo.supervisord.exception;
  */
 public class XMLRPCException extends RuntimeException {
 
+    /**
+     * Instantiates a new Xmlrpc exception.
+     */
     public XMLRPCException() {
         super();
     }
 
+    /**
+     * Instantiates a new Xmlrpc exception.
+     *
+     * @param ex the ex
+     */
     public XMLRPCException(Exception ex) {
         super(ex);
     }
 
+    /**
+     * Instantiates a new Xmlrpc exception.
+     *
+     * @param ex the ex
+     */
     public XMLRPCException(String ex) {
         super(ex);
     }
 
+    /**
+     * Instantiates a new Xmlrpc exception.
+     *
+     * @param msg the msg
+     * @param ex  the ex
+     */
     public XMLRPCException(String msg, Exception ex) {
         super(msg, ex);
     }

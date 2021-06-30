@@ -29,7 +29,7 @@ public class Base64 {
     /**
      * Encoder/decoder flag bit to indicate using the "URL and filename safe" variant of Base64 (see
      * RFC 3548 section 4) where {@code -} and {@code _} are used in place of {@code +} and {@code
-     * /}.
+     * /}*.
      */
     public static final int URL_SAFE = 8;
     /**
@@ -38,11 +38,20 @@ public class Base64 {
      */
     public static final int NO_CLOSE = 16;
 
-    //  --------------------------------------------------------
+    /**
+     * The type Coder.
+     */
+//  --------------------------------------------------------
     //  shared code
     //  --------------------------------------------------------
     /* package */ static abstract class Coder {
+        /**
+         * The Output.
+         */
         public byte[] output;
+        /**
+         * The Op.
+         */
         public int op;
 
         /**
@@ -50,16 +59,19 @@ public class Base64 {
          * must be big enough to hold all the coded data.  On exit, this.opwill be set to the length
          * of the coded data.
          *
-         * @param finish true if this is the final call to process for this object.  Will finalize
-         *               the coder state and include any final bytes in the output.
-         * @return true if the input so far is good; false if some error has been detected in the
-         * input stream..
+         * @param input  the input
+         * @param offset the offset
+         * @param len    the len
+         * @param finish true if this is the final call to process for this object.  Will finalize               the coder state and include any final bytes in the output.
+         * @return true if the input so far is good; false if some error has been detected in the input stream..
          */
         public abstract boolean process(byte[] input, int offset, int len, boolean finish);
 
         /**
-         * @return the maximum number of bytes a call to process() could produce for the given
-         * number of input bytes.  This may be an overestimate.
+         * Max output size int.
+         *
+         * @param len the len
+         * @return the maximum number of bytes a call to process() could produce for the given number of input bytes.  This may be an overestimate.
          */
         public abstract int maxOutputSize(int len);
     }
@@ -73,10 +85,9 @@ public class Base64 {
      * <p>The padding '=' characters at the end are considered optional, but if any are present,
      * there must be the correct number of them.
      *
-     * @param str   the input String to decode, which is converted to bytes using the default
-     *              charset
-     * @param flags controls certain features of the decoded output. Pass {@code DEFAULT} to decode
-     *              standard Base64.
+     * @param str   the input String to decode, which is converted to bytes using the default              charset
+     * @param flags controls certain features of the decoded output. Pass {@code DEFAULT} to decode              standard Base64.
+     * @return the byte [ ]
      * @throws IllegalArgumentException if the input contains incorrect padding
      */
     public static byte[] decode(String str, int flags) {
@@ -90,8 +101,8 @@ public class Base64 {
      * there must be the correct number of them.
      *
      * @param input the input array to decode
-     * @param flags controls certain features of the decoded output. Pass {@code DEFAULT} to decode
-     *              standard Base64.
+     * @param flags controls certain features of the decoded output. Pass {@code DEFAULT} to decode              standard Base64.
+     * @return the byte [ ]
      * @throws IllegalArgumentException if the input contains incorrect padding
      */
     public static byte[] decode(byte[] input, int flags) {
@@ -107,8 +118,8 @@ public class Base64 {
      * @param input  the data to decode
      * @param offset the position within the input array at which to start
      * @param len    the number of bytes of input to decode
-     * @param flags  controls certain features of the decoded output. Pass {@code DEFAULT} to decode
-     *               standard Base64.
+     * @param flags  controls certain features of the decoded output. Pass {@code DEFAULT} to decode               standard Base64.
+     * @return the byte [ ]
      * @throws IllegalArgumentException if the input contains incorrect padding
      */
     public static byte[] decode(byte[] input, int offset, int len, int flags) {
@@ -129,6 +140,9 @@ public class Base64 {
         return temp;
     }
 
+    /**
+     * The type Decoder.
+     */
     /* package */ static class Decoder extends Coder {
         /**
          * Lookup table for turning bytes into their position in the Base64 alphabet.
@@ -188,6 +202,12 @@ public class Base64 {
         private int value;
         final private int[] alphabet;
 
+        /**
+         * Instantiates a new Decoder.
+         *
+         * @param flags  the flags
+         * @param output the output
+         */
         public Decoder(int flags, byte[] output) {
             this.output = output;
             alphabet = ((flags & URL_SAFE) == 0) ? DECODE : DECODE_WEBSAFE;
@@ -378,8 +398,8 @@ public class Base64 {
      * Base64-encode the given data and return a newly allocated String with the result.
      *
      * @param input the data to encode
-     * @param flags controls certain features of the encoded output. Passing {@code DEFAULT} results
-     *              in output that adheres to RFC 2045.
+     * @param flags controls certain features of the encoded output. Passing {@code DEFAULT} results              in output that adheres to RFC 2045.
+     * @return the string
      */
     public static String encodeToString(byte[] input, int flags) {
         try {
@@ -396,8 +416,8 @@ public class Base64 {
      * @param input  the data to encode
      * @param offset the position within the input array at which to start
      * @param len    the number of bytes of input to encode
-     * @param flags  controls certain features of the encoded output. Passing {@code DEFAULT}
-     *               results in output that adheres to RFC 2045.
+     * @param flags  controls certain features of the encoded output. Passing {@code DEFAULT}               results in output that adheres to RFC 2045.
+     * @return the string
      */
     public static String encodeToString(byte[] input, int offset, int len, int flags) {
         try {
@@ -412,8 +432,8 @@ public class Base64 {
      * Base64-encode the given data and return a newly allocated byte[] with the result.
      *
      * @param input the data to encode
-     * @param flags controls certain features of the encoded output. Passing {@code DEFAULT} results
-     *              in output that adheres to RFC 2045.
+     * @param flags controls certain features of the encoded output. Passing {@code DEFAULT} results              in output that adheres to RFC 2045.
+     * @return the byte [ ]
      */
     public static byte[] encode(byte[] input, int flags) {
         return encode(input, 0, input.length, flags);
@@ -425,8 +445,8 @@ public class Base64 {
      * @param input  the data to encode
      * @param offset the position within the input array at which to start
      * @param len    the number of bytes of input to encode
-     * @param flags  controls certain features of the encoded output. Passing {@code DEFAULT}
-     *               results in output that adheres to RFC 2045.
+     * @param flags  controls certain features of the encoded output. Passing {@code DEFAULT}               results in output that adheres to RFC 2045.
+     * @return the byte [ ]
      */
     public static byte[] encode(byte[] input, int offset, int len, int flags) {
         Encoder encoder = new Encoder(flags, null);
@@ -460,6 +480,9 @@ public class Base64 {
         return encoder.output;
     }
 
+    /**
+     * The type Encoder.
+     */
     /* package */ static class Encoder extends Coder {
         /**
          * Emit a new line every this many output tuples.  Corresponds to a 76-character line length
@@ -486,13 +509,31 @@ public class Base64 {
                 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_',
         };
         final private byte[] tail;
+        /**
+         * The Tail len.
+         */
         /* package */ int tailLen;
         private int count;
+        /**
+         * The Do padding.
+         */
         final public boolean do_padding;
+        /**
+         * The Do newline.
+         */
         final public boolean do_newline;
+        /**
+         * The Do cr.
+         */
         final public boolean do_cr;
         final private byte[] alphabet;
 
+        /**
+         * Instantiates a new Encoder.
+         *
+         * @param flags  the flags
+         * @param output the output
+         */
         public Encoder(int flags, byte[] output) {
             this.output = output;
             do_padding = (flags & NO_PADDING) == 0;

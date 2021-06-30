@@ -49,9 +49,7 @@ public class SupervisordTest {
     @Test
     public void getState() throws SupervisordException {
         Map<String, Object> stateMap = supervisord.getState();
-        stateMap.forEach((k, v) -> {
-            log.info("getState k:{}  v:{}", k, v);
-        });
+        stateMap.forEach((k, v) -> log.info("getState k:{}  v:{}", k, v));
     }
 
     @Test
@@ -62,7 +60,7 @@ public class SupervisordTest {
 
     @Test
     public void readLog() throws SupervisordException {
-        String readLog = supervisord.readLog(0, 100);
+        String readLog = supervisord.readLog(100, 1000);
         log.info("readLog:{}", readLog);
     }
 
@@ -153,7 +151,9 @@ public class SupervisordTest {
     }
 
     @Test
-    public void readProcessStdoutLog() {
+    public void readProcessStdoutLog() throws SupervisordException {
+        String stdoutLog = supervisord.readProcessStdoutLog("logstash_test", 0, 10240);
+        System.out.println(stdoutLog);
     }
 
     @Test

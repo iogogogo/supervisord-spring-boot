@@ -5,5 +5,28 @@ package com.iogogogo.supervisord.core;
  */
 public enum Signal {
 
-    SIGTERM, SIGINT, SIGQUIT, SIGHUP, SIGUSR2, HUP
+    /**
+     * Sigterm signal.
+     */
+    SIGTERM,
+    /**
+     * Sigint signal.
+     */
+    SIGINT,
+    /**
+     * Sigquit signal.
+     */
+    SIGQUIT,
+    /**
+     * Sighup signal.
+     */
+    SIGHUP,
+    /**
+     * Sigusr 2 signal.
+     */
+    SIGUSR2,
+    /**
+     * Hup signal.
+     */
+    HUP
 }

@@ -11,10 +11,21 @@ public abstract class SupervisordException extends Exception {
 
     private Code code;
 
+    /**
+     * Instantiates a new Supervisord exception.
+     *
+     * @param code the code
+     */
     public SupervisordException(Code code) {
         this.code = code;
     }
 
+    /**
+     * Create supervisord exception.
+     *
+     * @param code the code
+     * @return the supervisord exception
+     */
     public static SupervisordException create(Code code) {
 
         switch (code) {
@@ -29,31 +40,58 @@ public abstract class SupervisordException extends Exception {
         }
     }
 
+    /**
+     * The type Unknown method exception.
+     */
     public static class UnknownMethodException extends SupervisordException {
+        /**
+         * Instantiates a new Unknown method exception.
+         */
         public UnknownMethodException() {
             super(Code.UNKNOWN_METHOD);
         }
     }
 
+    /**
+     * The type Already started exception.
+     */
     public static class AlreadyStartedException extends SupervisordException {
+        /**
+         * Instantiates a new Already started exception.
+         */
         public AlreadyStartedException() {
             super(Code.ALREADY_STARTED);
         }
     }
 
+    /**
+     * The type Not running exception.
+     */
     public static class NotRunningException extends SupervisordException {
+        /**
+         * Instantiates a new Not running exception.
+         */
         public NotRunningException() {
             super(Code.NOT_RUNNING);
         }
     }
 
+    /**
+     * The enum Code.
+     */
     public enum Code {
 
         /**
          * Returned on a start request for a process that is already started
          */
         UNKNOWN_METHOD(1),
+        /**
+         * Already started code.
+         */
         ALREADY_STARTED(60),
+        /**
+         * Not running code.
+         */
         NOT_RUNNING(70);
 
         private static final Map<Integer, Code> lookup = new HashMap<>();

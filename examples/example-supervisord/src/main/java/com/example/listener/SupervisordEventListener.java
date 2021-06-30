@@ -36,6 +36,7 @@ public class SupervisordEventListener implements ApplicationListener<Supervisord
                 eventProcessInfo(source);
                 break;
             case _GET_ALL_PROCESS_INFO:
+            case "com.iogogogo.supervisord.core.Supervisord.getAllProcessInfo":
                 eventAllProcessInfo(source);
                 break;
         }

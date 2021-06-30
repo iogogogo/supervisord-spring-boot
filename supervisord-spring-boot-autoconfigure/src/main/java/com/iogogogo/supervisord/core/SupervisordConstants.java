@@ -143,4 +143,8 @@ public interface SupervisordConstants {
      * The constant _SIGNAL_ALL_PROCESSES.
      */
     String _SIGNAL_ALL_PROCESSES = "signalAllProcesses";
+    /**
+     * The constant _READ_PROCESS_STDOUT_LOG.
+     */
+    String _READ_PROCESS_STDOUT_LOG = "readProcessStdoutLog";
 }

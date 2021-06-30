@@ -69,6 +69,9 @@ public class SupervisordProcess {
      */
     private int pid;
 
+    /**
+     * Instantiates a new Supervisord process.
+     */
     public SupervisordProcess() {
     }
 
