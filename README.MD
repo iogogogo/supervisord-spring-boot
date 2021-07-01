@@ -43,17 +43,16 @@ public class ExampleSupervisordApplication {
 ```
 
 - subscribe event
+
 ```java
 
 package com.example.listener;
 
-import com.iogogogo.supervisord.core.SupervisordConstants;
+import com.iogogogo.supervisord.bak.SupervisordConstants;
 import com.iogogogo.supervisord.event.SupervisordEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * // https://www.cnblogs.com/doudouxiaoye/p/5688629.html
@@ -72,13 +71,13 @@ public class SupervisordEventListener implements ApplicationListener<Supervisord
         Object source = supervisordEvent.getSource();
         switch (supervisordEvent.getMethod()) {
             case _GET_PID:
-                
+
                 break;
             case _GET_PROCESS_INFO:
-                
+
                 break;
             case _GET_ALL_PROCESS_INFO:
-                
+
                 break;
         }
     }

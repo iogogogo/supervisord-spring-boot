@@ -48,7 +48,7 @@ public class SupervisordAspect {
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Signature signature = joinPoint.getSignature();
-        String method = signature.getDeclaringTypeName() + "." + signature.getName();
+        String method = String.join(".", signature.getDeclaringTypeName(), signature.getName());
 
         log.debug("CLASS_METHOD : {}", method);
 

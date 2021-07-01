@@ -1,6 +1,5 @@
 package com.example.listener;
 
-import com.iogogogo.supervisord.core.SupervisordConstants;
 import com.iogogogo.supervisord.domain.SupervisordProcess;
 import com.iogogogo.supervisord.event.SupervisordEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -23,23 +22,11 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class SupervisordEventListener implements ApplicationListener<SupervisordEvent>, SupervisordConstants {
+public class SupervisordEventListener implements ApplicationListener<SupervisordEvent> {
 
     @Override
     public void onApplicationEvent(SupervisordEvent supervisordEvent) {
-        Object source = supervisordEvent.getSource();
-        switch (supervisordEvent.getMethod()) {
-            case _GET_PID:
-                eventPid(source);
-                break;
-            case _GET_PROCESS_INFO:
-                eventProcessInfo(source);
-                break;
-            case _GET_ALL_PROCESS_INFO:
-            case "com.iogogogo.supervisord.core.Supervisord.getAllProcessInfo":
-                eventAllProcessInfo(source);
-                break;
-        }
+        log.info("supervisordEvent: {}", supervisordEvent);
     }
 
     private void eventAllProcessInfo(Object source) {

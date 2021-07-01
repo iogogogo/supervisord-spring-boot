@@ -1,4 +1,4 @@
-package com.iogogogo.supervisord.core;
+package com.iogogogo.supervisord.core.parser;
 
 import com.iogogogo.supervisord.exception.SupervisordException;
 import com.iogogogo.supervisord.exception.XMLRPCException;
@@ -115,7 +115,7 @@ public class ResponseParser {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> o = (Map<String, Object>) getReturnValueFromElement(e);
                 Integer faultCode = (Integer) o.get(FAULT_CODE);
-                throw SupervisordException.create(SupervisordException.Code.get(faultCode));
+                throw new SupervisordException(faultCode, String.valueOf(o.get(FAULT_STRING)));
 
             }
 
