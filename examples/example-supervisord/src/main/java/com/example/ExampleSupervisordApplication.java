@@ -26,5 +26,6 @@ public class ExampleSupervisordApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         List<String> listMethods = supervisord.listMethods();
         listMethods.forEach(x -> log.info("method name: {}", x));
+
     }
 }

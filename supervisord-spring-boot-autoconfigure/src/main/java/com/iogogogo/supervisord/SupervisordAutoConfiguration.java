@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SupervisordProperties.class)
+// SQLiteConfiguration.class,
 @Import({SupervisordConfiguration.class, OkHttpConfiguration.class, SupervisordAspect.class, SupervisordRpcApi.class})
 public class SupervisordAutoConfiguration {
 }

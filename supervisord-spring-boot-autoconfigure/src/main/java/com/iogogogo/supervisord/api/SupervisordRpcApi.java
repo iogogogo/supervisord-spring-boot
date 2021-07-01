@@ -37,8 +37,8 @@ public class SupervisordRpcApi implements BaseResult {
         return ok(supervisord.getProcessInfo(procName));
     }
 
-    @PutMapping("/state/{procName}/{action}")
-    public ResponseWrapper<Boolean> startProc(@PathVariable("procName") String procName,
+    @PutMapping("/{procName}/{action}")
+    public ResponseWrapper<Boolean> status(@PathVariable("procName") String procName,
                                               @PathVariable("action") String action) throws SupervisordException, IOException {
         switch (action) {
             case "start":
