@@ -1,6 +1,7 @@
 # Supervisord process manager for spring boot starter
 
 Reference：
+
 - https://github.com/satifanie/supervisord4j
 - https://github.com/gturri/aXMLRPC
 - https://gitee.com/felord/sms-spring-boot
@@ -9,10 +10,10 @@ Usage：
 
 @see examples/example-supervisord
 
-
-
 - pom
+
 ```xml
+
 <dependency>
     <groupId>com.iogogogo.supervisord</groupId>
     <artifactId>supervisord-spring-boot-starter</artifactId>
@@ -21,6 +22,7 @@ Usage：
 ```
 
 - configuration
+
 ```java
 package com.example;
 
@@ -48,7 +50,6 @@ public class ExampleSupervisordApplication {
 
 package com.example.listener;
 
-import com.iogogogo.supervisord.bak.SupervisordConstants;
 import com.iogogogo.supervisord.event.SupervisordEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -64,22 +65,11 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class SupervisordEventListener implements ApplicationListener<SupervisordEvent>, SupervisordConstants {
+public class SupervisordEventListener implements ApplicationListener<SupervisordEvent> {
 
     @Override
     public void onApplicationEvent(SupervisordEvent supervisordEvent) {
-        Object source = supervisordEvent.getSource();
-        switch (supervisordEvent.getMethod()) {
-            case _GET_PID:
-
-                break;
-            case _GET_PROCESS_INFO:
-
-                break;
-            case _GET_ALL_PROCESS_INFO:
-
-                break;
-        }
+        log.info("supervisordEvent: {}", supervisordEvent);
     }
 }
 

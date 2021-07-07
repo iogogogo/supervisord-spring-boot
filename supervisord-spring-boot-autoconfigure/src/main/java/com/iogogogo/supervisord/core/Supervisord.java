@@ -19,11 +19,11 @@ public interface Supervisord extends Constant {
 
     Object multicall() throws IOException, SupervisordException;
 
-    Object addProcessGroup() throws IOException, SupervisordException;
+    Boolean addProcessGroup() throws IOException, SupervisordException;
 
-    Object clearAllProcessLogs() throws IOException, SupervisordException;
+    List<SupervisordProcess> clearAllProcessLogs() throws IOException, SupervisordException;
 
-    Object clearLog() throws IOException, SupervisordException;
+    Boolean clearLog() throws IOException, SupervisordException;
 
     Object clearProcessLog() throws IOException, SupervisordException;
 

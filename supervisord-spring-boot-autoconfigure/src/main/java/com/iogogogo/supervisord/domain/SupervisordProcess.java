@@ -3,6 +3,8 @@ package com.iogogogo.supervisord.domain;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * Created by tao.zeng on 2021/6/22.
  * <p>
@@ -10,7 +12,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class SupervisordProcess {
+public class SupervisordProcess implements Serializable {
 
     /**
      * The Name.

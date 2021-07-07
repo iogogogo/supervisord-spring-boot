@@ -21,14 +21,14 @@ public interface ListUtils {
      * @param records  the records
      * @return the page wrapper
      */
-    static <T> PageWrapper<T> partition(int pageNo, int pageSize, List<T> records) {
+    static <T extends Serializable> PageWrapper<T> partition(long pageNo, long pageSize, List<T> records) {
         if (pageNo <= 0) pageNo = 1;
 
         // 计算偏移量
-        int offset = (pageNo - 1) * pageSize;
+        long offset = (pageNo - 1) * pageSize;
 
         // 总算总记录数
-        int totalSize = records.size();
+        long totalSize = records.size();
 
         if (offset > totalSize) return new PageWrapper<>(pageNo, pageSize, totalSize, Collections.emptyList());
 
@@ -67,7 +67,7 @@ public interface ListUtils {
         /**
          * 当前页，每页显示size
          */
-        private int pageNo, pageSize;
+        private long pageNo, pageSize;
 
         /**
          * 总记录数，总页数
@@ -79,6 +79,9 @@ public interface ListUtils {
          */
         private List<T> records;
 
+        public PageWrapper() {
+        }
+
         /**
          * Instantiates a new Page wrapper.
          *
@@ -87,7 +90,7 @@ public interface ListUtils {
          * @param totalSize the total size
          * @param records   the records
          */
-        public PageWrapper(int pageNo, int pageSize, long totalSize, List<T> records) {
+        public PageWrapper(long pageNo, long pageSize, long totalSize, List<T> records) {
             this.setPageNo(pageNo);
             this.pageSize = pageSize;
             this.records = records;
@@ -100,7 +103,7 @@ public interface ListUtils {
          *
          * @param pageNo the page no
          */
-        public void setPageNo(int pageNo) {
+        public void setPageNo(long pageNo) {
             if (pageNo <= 0) this.pageNo = 1;
             this.pageNo = pageNo;
         }

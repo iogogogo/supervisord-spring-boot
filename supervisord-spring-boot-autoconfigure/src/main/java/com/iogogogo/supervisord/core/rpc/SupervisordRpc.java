@@ -69,20 +69,21 @@ public class SupervisordRpc implements Supervisord {
 
     @SupervisordEvent
     @Override
-    public Object addProcessGroup() throws IOException, SupervisordException {
+    public Boolean addProcessGroup() throws IOException, SupervisordException {
         return null;
     }
 
     @SupervisordEvent
     @Override
-    public Object clearAllProcessLogs() throws IOException, SupervisordException {
+    public List<SupervisordProcess> clearAllProcessLogs() throws IOException, SupervisordException {
         return null;
     }
 
-    @SupervisordEvent
     @Override
-    public Object clearLog() throws IOException, SupervisordException {
-        return null;
+    @SupervisordEvent
+    public Boolean clearLog() throws IOException, SupervisordException {
+        Tuple2<String, String> param = buildParam(buildFullParam(Supervisor._CLEAR_LOG));
+        return XmlParse.parse(call(param));
     }
 
     @SupervisordEvent
