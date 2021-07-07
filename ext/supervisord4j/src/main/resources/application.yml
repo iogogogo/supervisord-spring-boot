@@ -1,0 +1,12 @@
+spring:
+  flyway:
+    enabled: true
+    clean-disabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+  profiles:
+    active: sqlite
+supervisord:
+  url: http://127.0.0.1:9001/RPC2/
+  username: admin
+  password: admin

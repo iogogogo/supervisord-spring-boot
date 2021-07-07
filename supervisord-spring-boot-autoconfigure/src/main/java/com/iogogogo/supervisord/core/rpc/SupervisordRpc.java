@@ -341,8 +341,11 @@ public class SupervisordRpc implements Supervisord {
                 .create(MediaType.parse(org.springframework.http.MediaType.APPLICATION_XML_VALUE),
                         param._2().getBytes(StandardCharsets.UTF_8));
 
+        String url = supervisordProperties.getUrl();
+        log.info("supervisord rpc: {}", url);
+
         Request request = new Request.Builder()
-                .url(supervisordProperties.getUrl())
+                .url(url)
                 .post(requestBody)
                 .build();
 
