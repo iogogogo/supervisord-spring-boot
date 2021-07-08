@@ -3,7 +3,6 @@ package com.iogogogo.supervisord4j.repository;
 import com.google.common.collect.Lists;
 import com.iogogogo.supervisord4j.base.BaseJpaRepository;
 import com.iogogogo.supervisord4j.pojo.entity.JobEntity;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -20,20 +19,17 @@ import java.util.List;
  * jps in https://stackoverflow.com/questions/9321916/jpa-criteriabuilder-how-to-use-in-comparison-operator
  */
 @Repository
-public class SupervisorRepository extends BaseJpaRepository<JobEntity, Long> {
+public class SupervisordRepository extends BaseJpaRepository<JobEntity, Long> {
 
-    private final Environment environment;
 
-    public SupervisorRepository(EntityManager em, Environment environment) {
+    public SupervisordRepository(EntityManager em) {
         super(JobEntity.class, em);
-        this.environment = environment;
     }
 
 
-    public List<JobEntity> findByNameList(Collection<String> nameList) {
+    public List<JobEntity> findByNameList(String server, Collection<String> nameList) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
 
-        String server = environment.getProperty("supervisord.url");
 
         CriteriaQuery<JobEntity> criteria = builder.createQuery(JobEntity.class);
 

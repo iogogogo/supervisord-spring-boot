@@ -13,5 +13,5 @@ public interface SupervisordService {
 
     ListUtils.PageWrapper<JobEntity> partition(int pageNo, int pageSize, String condition) throws SupervisordException, IOException;
 
-    JobEntity merge(JobEntity entity);
+    JobEntity merge(Long jobId, JobEntity entity);
 }
