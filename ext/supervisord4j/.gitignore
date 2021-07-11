@@ -34,3 +34,4 @@ build/
 
 *.log
 *.db
+git.properties

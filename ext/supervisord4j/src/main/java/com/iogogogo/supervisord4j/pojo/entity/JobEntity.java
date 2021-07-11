@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * Created by tao.zeng on 2021/7/7.
@@ -38,8 +37,6 @@ public class JobEntity extends SupervisordProcess {
 
     @Column(name = "update_time")
     private LocalDateTime updateTime;
-
-    private transient LocalTime uptime;
 
     public JobEntity() {
     }

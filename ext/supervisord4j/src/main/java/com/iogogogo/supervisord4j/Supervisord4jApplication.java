@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.info.GitProperties;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 
 import java.io.IOException;
@@ -22,13 +23,19 @@ public class Supervisord4jApplication implements CommandLineRunner {
     @Autowired
     private Supervisord supervisord;
 
+    @Autowired
+    private GitProperties gitProperties;
+
     public static void main(String[] args) {
         SpringApplication.run(Supervisord4jApplication.class, args);
     }
 
+
     @Override
     public void run(String... args) throws Exception {
         // listMethod();
+
+        gitProperties.forEach(x -> log.info("gitProperties key:{}\tvalue:{}", x.getKey(), x.getValue()));
 
         log.info("Supervisord4jApplication start completed.");
     }
