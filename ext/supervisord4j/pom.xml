@@ -94,7 +94,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <!-- 文件名追加一个bootJar -->
                     <classifier>bootJar</classifier>
+                    <!-- 文件输出路径，修改为target的boot目录下 -->
                     <outputDirectory>${project.build.directory}/boot</outputDirectory>
                     <excludes>
                         <exclude>

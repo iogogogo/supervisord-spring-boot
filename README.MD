@@ -8,7 +8,7 @@ Reference：
 
 Usage：
 
-@see examples/example-supervisord
+@see ext/supervisord4j
 
 - pom
 
